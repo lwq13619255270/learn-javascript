@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>proxy基本使用</title>
+</head>
+<body>
+    <script>
+        let _data= {
+            a:12,
+            arr: [1, 2, 3]
+        };
+
+        let p = new Proxy(_data, {
+            has(data, name) {  // in 
+                if (name in data) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }, 
+            get(data, name) {
+                if (name in data) {
+                    return data.name;
+                } else {
+                    throw new Error(`${name} is not defined`);
+                }
+            },
+            set(data, name, val) {
+                console.log('set')
+                data[name] = val;
+            },
+            deleteProperty(data, name) {
+                delete data[name]
+            }
+        })
+        
+    </script>
+</body>
+</html>

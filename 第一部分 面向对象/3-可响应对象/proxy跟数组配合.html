@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>proxy跟数组配合</title>
+</head>
+<body>
+    <script>
+        let _data = [1, 2, 3]
+
+        let p = new Proxy(_data, {
+          get(data, name) {
+            console.log('get')
+            return data[name]
+          },
+          set(data, name, val) {
+            data[name] = val;
+          }
+        })
+
+
+        console.log(p)
+    </script>
+</body>
+</html>

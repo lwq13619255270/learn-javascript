@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>渲染组件</title>
+    <style>
+        .dialog {
+            width: 100px;
+            height: 100px;
+            background:  red;
+        }
+    </style>
+</head>
+<body>
+    <div id="div1">
+        <div>
+            dfdfdf
+        </div>
+        <cmp></cmp>
+        <UserLogin></UserLogin>
+    </div>
+    <script>
+        // html元素 -> 组件
+        function render(options) {
+            // 1 root
+            let root = null;
+            if(typeof options.root === 'string' ) {
+                root = document.querySelector(options.root);
+                if(!root) {
+                    throw new Error(`can't found ${options.root}`)
+                }
+            } else if (options.root instanceof HTMLElement) {
+                root = options.root;
+            } else {
+                throw new Error('root invalid')
+            }
+
+            // 2 找出所有自定义的元素
+            let elements = root.getElementsByTagName('*');
+            Array.from(elements).forEach(element => {
+                if (element.constructor === HTMLUnknownElement) {
+                    console.log(element.tagName, options.components)
+                    for(let cmpName in options.components) {
+                        if(cmpName.toLowerCase() === element.tagName.toLowerCase()) {
+                            let CmpCls = options.components[cmpName];
+                            console.log(CmpCls)
+
+                            let cpm = new CmpCls();
+                            let res = cpm.render();
+
+                            element.parentNode.replaceChild(res, element);
+                        }
+                    }
+                }
+            });
+        }
+
+        // 抽象的
+        class component {
+            render() {
+                throw new Error('render is required')
+            }
+        }
+
+        class Cmp extends component {
+            render() {
+                let div = document.createElement('div');
+                div.innerHTML = '我是cmp';
+                return div
+            }
+        }
+
+        class UserLogin extends component {
+            render() {
+                let div = document.createElement('div');
+                div.className='dialog';
+                return div
+            }
+        }
+
+        render({
+            root: '#div1',
+            components: {
+                Cmp,UserLogin
+            }
+        })
+    </script>
+</body>
+</html>

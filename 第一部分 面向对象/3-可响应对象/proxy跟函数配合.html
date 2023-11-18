@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>proxy基本使用</title>
+</head>
+<body>
+    <script>
+        let _data= function (a, b, c) {
+            console.log(a+b+c)
+        }
+
+        let p = new Proxy(_data, {
+            apply(fn, thisValue, args) {  // 专门监听函数调用的
+                // console.log(fn === _data)  // true
+                if(args.length !=3) {
+                    throw new Error('argument length must be 3')
+                } else {
+                    fn(...args)
+                }
+            }   
+        })
+
+
+        console.log(p(2,3,5))
+    </script>
+</body>
+</html>

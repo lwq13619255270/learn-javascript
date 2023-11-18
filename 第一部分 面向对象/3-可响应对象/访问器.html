@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>访问器</title>
+</head>
+
+<body>
+    <script>
+        class A {
+            constructor() {
+                this._num = 12; // 内部成员，不要外界随便修改 js没有私有成员 所以使用命名方式进行区分
+            }
+
+            get num() {
+                return this._num
+            }
+
+            set num(val) {
+                if (typeof val != 'number') {
+                    throw new Error(`${val} must be a number`)
+                }
+                this._num = val;
+            }
+        }
+
+        let a = new A();
+    </script>
+</body>
+
+</html>

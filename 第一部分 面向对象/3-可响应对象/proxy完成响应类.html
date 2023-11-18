@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>proxy跟数组配合</title>
+</head>
+
+<body>
+  <script>
+    // 方法1
+    // class A {
+    //   render() {
+    //     console.log('渲染')
+    //   }
+    // }
+
+    // let a = new Proxy(new A(), {
+    //   set(data, name, val) {
+    //     data[name] = val;
+    //     data.render();
+    //   }
+    // })
+    // a.name = 'lwq'
+
+    // 方法2 
+    let B = new Proxy(class {
+      render() {
+        console.log('渲染2')
+      }
+    }, {
+      construct(cls, args) {
+        const obj = new cls();
+        return new Proxy(obj, {
+          set(data, name, val) {
+            data[name] = val;
+            obj.render();
+          }
+        })
+      }
+    })
+    let b  = new B()
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>proxy跟数组配合</title>
+</head>
+<body>
+    <script>
+      class A {
+
+      }
+
+      let p = new Proxy(A, {
+        construct(fn, args) {
+          // fn === A 
+          console.log(fn, args)
+          return {};
+        }
+      })
+
+
+      new p(22)
+      // console.log(p)
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>响应数据的修改</title>
+</head>
+<body>
+    <script>
+        class App { 
+            constructor(options) {
+                let data = options.data();
+
+                // Object.defineProperty(this, 'a', {
+                //     configurable: true,
+                //     get() {
+                //         return data.a;
+                //     },
+                //     set(val) {
+                //         console.log('修改数据了')
+                //         data.a = val
+                //     }
+                // })
+                for(let name in data) {
+                    Object.defineProperty(this, name, {
+                        configurable: true,
+                        get() {
+                            return data[name];
+                        },
+                        set(val) {
+                            console.log(`${name}修改数据了`)
+                            data[name] = val
+
+                            this.render()
+                        }
+                    })
+                }
+                this._updated = false;
+            }
+
+            $set(obj, key, val) {
+                this._updated = false;
+                obj[key] = val;  // 防止修改能监听到的数据，导致同时出发set,渲染两次
+                if ( this._updated === false) {
+                    this.render()
+                }
+            }
+
+            render() {
+                console.log('render')
+                this._updated = true;
+            }
+        }
+
+        let app = new App({
+            root:'#div1',
+            data() {
+                return {
+                    a:1,
+                    b:2,
+                    arr: [1, 23, 11],
+                    obj: {
+                        a:1,
+                        b:2
+                    }
+                }
+            }
+        })
+        app.a = 99;
+    </script>
+</body>
+</html>
